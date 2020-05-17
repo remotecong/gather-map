@@ -1,65 +1,50 @@
-import React from 'react';
-import { Map, LayersControl, Popup } from 'react-leaflet';
-import { GoogleMutant, GoogleApiLoader } from 'react-leaflet-googlemutant';
-import 'leaflet/dist/leaflet.css';
-import Marker from './components/GatherMarkerComponent';
+import React from "react";
+import {
+  withGoogleMap,
+  withScriptjs,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
+import { getLastKnownCoords, getLastKnownZoom } from "./utils/cache";
+import "./App.css";
 
-const { BaseLayer } = LayersControl;
+const GatherMapComponent = withScriptjs(
+  withGoogleMap(props => {
+    return (
+      <GoogleMap
+        defaultZoom={getLastKnownZoom()}
+        defaultCenter={getLastKnownCoords()}
+        onClick={props.onMapClick}
+      >
+        {props.markers.map(m => (
+          <Marker position={m.position} />
+        ))}
+      </GoogleMap>
+    );
+  })
+);
 
-class App extends React.Component {
-  state = {
-    zoom: 13,
-    position: [36.002861, -95.886398],
-    markers: [],
-  };
+function App() {
+  const [markers, setMarkers] = React.useState([]);
 
-  onClickLocation = (e) => {
-    const markerData = {
-      id: e.latlng.lat.toString() + e.latlng.lng.toString(),
-      position: e.latlng,
-    };
-    const markers = this.state.markers
-      .concat([markerData])
-      .filter((data, i, collection) => collection.findIndex(({ id }) => data.id === id) === i);
-    if (markers.length !== this.state.markers.length) {
-      this.setState({ markers: this.state.markers.concat([markerData]) });
+  const onClick = e => {
+    if (e && e.latLng) {
+      setMarkers([...markers, { position: e.latLng }]);
     }
   };
 
-  renderMarkers = () => {
-    return this.state.markers.map(({ id, position }) => {
-      return <Marker key={id} position={position} />;
-    });
-  };
-
-  render = () => {
-    const { position, zoom } = this.state;
-
-    return (
-      <>
-        <GoogleApiLoader apiKey="AIzaSyCaMRWqlcMu96wUqotTCAwxNXPIH8Rif6c">
-          <Map
-            onClick={(e) => console.log(e) || this.refs.map.leafletElement.locate()}
-            onLocationFound={this.onClickLocation}
-            center={position}
-            zoom={zoom}
-            style={{height: '100vh'}}
-            ref="map"
-          >
-            <LayersControl position='topright'>
-              <BaseLayer checked name='Google Maps Roads'>
-                <GoogleMutant type="roadmap"/>
-              </BaseLayer>
-              <BaseLayer name='Google Maps Satellite'>
-                <GoogleMutant type="satellite" />
-              </BaseLayer>
-            </LayersControl>
-            {this.renderMarkers()}
-          </Map>
-        </GoogleApiLoader>
-      </>
-    );
-  };
+  return (
+    <div className="App">
+      <GatherMapComponent
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`}
+        loadingElement={<div style={{ height: "100%" }} />}
+        containerElement={<div style={{ height: "100%" }} />}
+        mapElement={<div style={{ height: "100%" }} />}
+        onMapClick={onClick}
+        markers={markers}
+      />
+    </div>
+  );
 }
 
 export default App;
