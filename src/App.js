@@ -1,6 +1,6 @@
 import React from "react";
 import Map from "./maps/map";
-import { Marker, Polygon } from "google-maps-react";
+import { Circle, Marker, Polygon } from "google-maps-react";
 import DrawTools from "./drawTools";
 import useDrawingState from "./reducers/drawReducer";
 import {
@@ -8,24 +8,44 @@ import {
   loadTerritory,
   saveTerritory
 } from "./utils/database";
+import { getAddress } from "./maps/geocode";
 
 import "./App.css";
 
 function App() {
   const {
-    isDrawing,
-    points,
+    addLookup,
     addPoint,
-    undo,
+    isDrawing,
+    lookups,
+    points,
+    reset,
     toggleIsDrawing,
-    reset
+    undo
   } = useDrawingState();
+  const [bounds, setBounds] = React.useState(null);
 
-  const onClick = (_props, _map, e) => {
+  function onClick(_props, _map, e) {
     if (isDrawing && e && e.latLng) {
       addPoint(e.latLng);
     }
-  };
+  }
+
+  async function onPolyClick(_props, _map, e) {
+    if (e && e.latLng && bounds) {
+      if (isDrawing) {
+        addPoint(e.latLng);
+      } else if (bounds) {
+        try {
+          const address = await getAddress(e.latLng);
+          addLookup(e.latLng);
+          console.log("Address:", address);
+        } catch (err) {
+          console.error("GEOCODE ERR", err);
+        }
+      }
+    }
+  }
 
   const renderLastPoint = () => {
     const i = points.length - 1;
@@ -33,6 +53,23 @@ function App() {
       return <Marker position={points[i]} />;
     }
   };
+
+  function renderLookups() {
+    if (!isDrawing) {
+      return lookups.map((position, i) => (
+        <Circle
+          key={i}
+          radius={8}
+          center={position}
+          strokeColor="transparent"
+          strokeOpacity={0}
+          strokeWeight={0}
+          fillColor="#00FF00"
+          fillOpacity={0.2}
+        />
+      ));
+    }
+  }
 
   async function onSave() {
     if (points.length < 3) {
@@ -61,9 +98,12 @@ function App() {
     }
     reset();
     const territory = await loadTerritory(name);
+    const bounds = new window.google.maps.LatLngBounds();
     for (const p of territory) {
       addPoint(p);
+      bounds.extend(p);
     }
+    setBounds(bounds);
   }
 
   return (
@@ -75,17 +115,18 @@ function App() {
         onSave={onSave}
         onLoadClick={onLoadClick}
       />
-      <Map onClick={onClick}>
+      <Map bounds={bounds} onClick={onClick}>
         <Polygon
           paths={points}
-          onClick={onClick}
+          onClick={onPolyClick}
           strokeColor="#0000FF"
           strokeOpacity={0.8}
           strokeWeight={2}
           fillColor="#0000FF"
-          fillOpacity={0.3}
+          fillOpacity={0.1}
         />
         {renderLastPoint()}
+        {renderLookups()}
       </Map>
     </div>
   );

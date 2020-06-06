@@ -23,6 +23,7 @@ export const MapContainer = ({ google, onClick, children, ...otherProps }) => {
       onClick={onClick}
       onIdle={saveCurrentPosition}
       initialCenter={getLastKnownCoords()}
+      {...otherProps}
     >
       {children}
     </Map>

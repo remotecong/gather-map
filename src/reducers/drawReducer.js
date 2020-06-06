@@ -2,6 +2,7 @@ import React from "react";
 
 const initialState = {
   points: [],
+  lookups: [],
   isDrawing: false
 };
 
@@ -25,10 +26,17 @@ function reset() {
   return { type: RESET };
 }
 
+const ADD_LOOKUP = "add-lookup";
+function addLookup(coords) {
+  return { type: ADD_LOOKUP, coords };
+}
+
 function drawReducer(state, action) {
   switch (action.type) {
     case ADD_POINT:
       return { ...state, points: [...state.points, action.coords] };
+    case ADD_LOOKUP:
+      return { ...state, lookups: [...state.lookups, action.coords] };
     case UNDO:
       return {
         ...state,
@@ -44,17 +52,19 @@ function drawReducer(state, action) {
 }
 
 export default function () {
-  const [{ isDrawing, points }, dispatch] = React.useReducer(
+  const [{ isDrawing, points, lookups }, dispatch] = React.useReducer(
     drawReducer,
     initialState
   );
 
   return {
     isDrawing,
+    lookups,
     points,
     addPoint: p => dispatch(addPoint(p)),
     undo: () => dispatch(undo()),
     toggleIsDrawing: () => dispatch(toggleIsDrawing()),
-    reset: () => dispatch(reset())
+    reset: () => dispatch(reset()),
+    addLookup: c => dispatch(addLookup(c))
   };
 }
