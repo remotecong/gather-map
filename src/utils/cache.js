@@ -22,6 +22,14 @@ export function getCachedItem(key) {
   }
 }
 
+export function setLastKnownZoom(z) {
+  return cacheItem("lk-zoom", z);
+}
+
+export function setLastKnownCoords(c) {
+  return cacheItem("lk-coords", c);
+}
+
 export function cacheItem(key, value) {
   return window.localStorage.setItem(KEY_PREFIX + key, JSON.stringify(value));
 }

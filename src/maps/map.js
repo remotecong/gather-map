@@ -1,13 +1,33 @@
 import React from "react";
 import { GoogleApiWrapper, Map } from "google-maps-react";
+import {
+  getLastKnownCoords,
+  getLastKnownZoom,
+  setLastKnownCoords,
+  setLastKnownZoom
+} from "../utils/cache";
 
-export const MapContainer = props => {
+function saveCurrentPosition(ignore, map) {
+  const center = map.getCenter();
+  console.log(ignore);
+  console.log("map", map);
+  if (null != center) {
+    setLastKnownCoords(center);
+    setLastKnownZoom(map.getZoom());
+  }
+}
+
+export const MapContainer = ({ google, onClick, children, ...otherProps }) => {
   return (
     <Map
-      google={props.google}
-      zoom={props.defaultZoom}
-      initialCenter={props.defaultCenter}
-    ></Map>
+      google={google}
+      zoom={getLastKnownZoom()}
+      onClick={onClick}
+      onIdle={saveCurrentPosition}
+      initialCenter={getLastKnownCoords()}
+    >
+      {children}
+    </Map>
   );
 };
 
