@@ -9,8 +9,6 @@ import {
 
 function saveCurrentPosition(ignore, map) {
   const center = map.getCenter();
-  console.log(ignore);
-  console.log("map", map);
   if (null != center) {
     setLastKnownCoords(center);
     setLastKnownZoom(map.getZoom());
