@@ -5,20 +5,24 @@ const initialState = {
   isDrawing: false
 };
 
-const ADD_POINT = "add-point";
-const UNDO = "undo";
 const TOGGLE_IS_DRAWING = "toggle-is-drawing";
-
 function toggleIsDrawing() {
   return { type: TOGGLE_IS_DRAWING };
 }
 
+const ADD_POINT = "add-point";
 function addPoint(coords) {
   return { type: ADD_POINT, coords };
 }
 
+const UNDO = "undo";
 function undo() {
   return { type: UNDO };
+}
+
+const RESET = "reset";
+function reset() {
+  return { type: RESET };
 }
 
 function drawReducer(state, action) {
@@ -32,6 +36,8 @@ function drawReducer(state, action) {
       };
     case TOGGLE_IS_DRAWING:
       return { ...state, isDrawing: !state.isDrawing };
+    case RESET:
+      return initialState;
     default:
       return state;
   }
@@ -48,6 +54,7 @@ export default function () {
     points,
     addPoint: p => dispatch(addPoint(p)),
     undo: () => dispatch(undo()),
-    toggleIsDrawing: () => dispatch(toggleIsDrawing())
+    toggleIsDrawing: () => dispatch(toggleIsDrawing()),
+    reset: () => dispatch(reset())
   };
 }
