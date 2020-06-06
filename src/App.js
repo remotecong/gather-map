@@ -3,7 +3,11 @@ import Map from "./maps/map";
 import { Marker, Polygon } from "google-maps-react";
 import DrawTools from "./drawTools";
 import useDrawingState from "./reducers/drawReducer";
-import { saveTerritory } from "./utils/database";
+import {
+  getTerritoryList,
+  loadTerritory,
+  saveTerritory
+} from "./utils/database";
 
 import "./App.css";
 
@@ -25,7 +29,7 @@ function App() {
 
   const renderLastPoint = () => {
     const i = points.length - 1;
-    if (0 <= i) {
+    if (isDrawing && 0 <= i) {
       return <Marker position={points[i]} />;
     }
   };
@@ -50,6 +54,18 @@ function App() {
     }
   }
 
+  async function onLoadClick() {
+    const name = prompt("Please enter territory name:", "");
+    if (!(await getTerritoryList()).includes(name)) {
+      return alert(`Cannot find territory with a name of "${name}"`);
+    }
+    reset();
+    const territory = await loadTerritory(name);
+    for (const p of territory) {
+      addPoint(p);
+    }
+  }
+
   return (
     <div className="App">
       <DrawTools
@@ -57,6 +73,7 @@ function App() {
         onToggleIsDrawing={toggleIsDrawing}
         onUndo={undo}
         onSave={onSave}
+        onLoadClick={onLoadClick}
       />
       <Map onClick={onClick}>
         <Polygon

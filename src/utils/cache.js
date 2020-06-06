@@ -1,5 +1,5 @@
-const pkg = require("../../package.json");
-const KEY_PREFIX = `gather-map-${pkg.version}`;
+const { version } = require("../../package.json");
+const KEY_PREFIX = `gather-map-${version}`;
 export function getLastKnownCoords() {
   return (
     getCachedItem("lk-coords") || {
