@@ -5,7 +5,7 @@ import {
   getLastKnownZoom,
   setLastKnownCoords,
   setLastKnownZoom
-} from "../utils/cache";
+} from "../../utils/cache";
 
 function saveCurrentPosition(ignore, map) {
   const center = map.getCenter();

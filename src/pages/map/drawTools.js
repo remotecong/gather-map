@@ -1,5 +1,5 @@
-import React from "react";
-import { css, cx } from "emotion";
+/** @jsx jsx */
+import { jsx, css } from "@emotion/core";
 
 const styles = {
   container: css({
@@ -25,7 +25,10 @@ const styles = {
 
 export const DrawTool = ({ active = false, children, onClick }) => (
   <p
-    className={cx(styles.drawTool, active ? styles.drawToolActive : null)}
+    css={css`
+      ${styles.drawTool}
+      ${active ? styles.drawToolActive : null}
+    `}
     onClick={onClick}
   >
     {children}
@@ -39,7 +42,7 @@ export default ({
   onToggleIsDrawing,
   onUndo
 }) => (
-  <div className={styles.container}>
+  <div css={styles.container}>
     <DrawTool active={isDrawing} onClick={onToggleIsDrawing}>
       Draw
     </DrawTool>
