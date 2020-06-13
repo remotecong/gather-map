@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import TerritoryListPage from "./pages/territoryList";
 import EditTerritoryPage from "./pages/map/EditTerritoryPage";
+import LookupTerritoryPage from "./pages/map/LookupTerritoryPage";
 
 function Routes() {
   return (
@@ -21,7 +22,7 @@ function Routes() {
           <h1>Work territory</h1>
         </Route>
         <Route path="/territory/lookup/:territoryId">
-          <h1>Lookup houses for territory</h1>
+          <LookupTerritoryPage />
         </Route>
         <Route path="/signin">
           <h1>Sign in page</h1>

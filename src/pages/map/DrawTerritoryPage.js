@@ -33,7 +33,7 @@ function App() {
     if (e && e.latLng && bounds) {
       if (isDrawing) {
         addPoint(e.latLng);
-      } else if (bounds) {
+      } else {
         try {
           const address = await getAddress(e.latLng);
           addLookup(e.latLng);
