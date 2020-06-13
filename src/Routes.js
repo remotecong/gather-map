@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import TerritoryListPage from "./pages/territoryList";
-import DrawTerritoryPage from "./pages/map/DrawTerritoryPage";
+import EditTerritoryPage from "./pages/map/EditTerritoryPage";
 
 function Routes() {
   return (
@@ -15,7 +15,7 @@ function Routes() {
           <TerritoryListPage />
         </Route>
         <Route path="/territory/edit/:id">
-          <DrawTerritoryPage />
+          <EditTerritoryPage />
         </Route>
         <Route path="/territory/work/:territoryId">
           <h1>Work territory</h1>
