@@ -3,23 +3,28 @@ import { jsx, css } from "@emotion/core";
 
 const styles = {
   container: css({
+    boxShadow: "0 2px 5px #11115f88",
+    left: "1em",
     position: "fixed",
     top: "6em",
-    left: "1em",
     zIndex: 2
   }),
   drawTool: css({
-    backgroundColor: "#ccc",
+    backgroundColor: "#eeeeff",
+    borderBottom: "solid 1px #11115fee",
     cursor: "pointer",
+    fontWeight: "bold",
     margin: 0,
     padding: "1em",
     "&:active": {
-      backgroundColor: "#666"
+      backgroundColor: "#bbeeff"
+    },
+    "&:last-child": {
+      borderBottom: "none"
     }
   }),
   drawToolActive: css({
-    backgroundColor: "#666",
-    color: "#fff"
+    backgroundColor: "#bbeeff"
   })
 };
 

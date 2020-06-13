@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import TerritoryListPage from "./pages/territoryList";
 import DrawTerritoryPage from "./pages/map/DrawTerritoryPage";
 
 function Routes() {
@@ -11,7 +12,7 @@ function Routes() {
           <h1>Home Page yeah</h1>
         </Route>
         <Route exact path="/territory">
-          <h1>Territory List!</h1>
+          <TerritoryListPage />
         </Route>
         <Route path="/territory/edit/:id">
           <DrawTerritoryPage />
