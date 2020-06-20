@@ -22,7 +22,9 @@ export function getAddress(coords) {
       if (0 === results.length) {
         return reject("no results found");
       }
-      resolve(getGatherableAddress(results[0]));
+      const gatherableAddress = getGatherableAddress(results[0]);
+      gatherableAddress.latLng = coords;
+      resolve(gatherableAddress);
     });
   });
 }
@@ -48,9 +50,17 @@ function getGatherableAddress(place) {
       "administrative_area_level_1",
       true
     );
+    let gatherAddress = place.formatted_address;
     if (num && street && city && state) {
-      return `${num} ${street}, ${city}, ${state}`;
+      gatherAddress = `${num} ${street}, ${city}, ${state}`;
     }
+    return {
+      houseNumber: num,
+      street,
+      city,
+      state,
+      gatherAddress,
+      toString: () => gatherAddress
+    };
   }
-  return place.formatted_address;
 }

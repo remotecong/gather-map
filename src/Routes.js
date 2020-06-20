@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TerritoryListPage from "./pages/territoryList";
 import EditTerritoryPage from "./pages/map/EditTerritoryPage";
 import LookupTerritoryPage from "./pages/map/LookupTerritoryPage";
+import NewTerritoryPage from "./pages/map/NewTerritoryPage";
 
 function Routes() {
   return (
@@ -14,6 +15,9 @@ function Routes() {
         </Route>
         <Route exact path="/territory">
           <TerritoryListPage />
+        </Route>
+        <Route path="/territory/new">
+          <NewTerritoryPage />
         </Route>
         <Route path="/territory/edit/:id">
           <EditTerritoryPage />

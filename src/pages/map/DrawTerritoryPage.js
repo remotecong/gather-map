@@ -97,7 +97,7 @@ function App() {
     reset();
     const territory = await loadTerritory(name);
     const bounds = new window.google.maps.LatLngBounds();
-    for (const p of territory) {
+    for (const p of territory.points) {
       addPoint(p);
       bounds.extend(p);
     }

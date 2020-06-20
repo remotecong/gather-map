@@ -24,8 +24,8 @@ function App() {
 
   React.useEffect(() => {
     async function prepareMap() {
-      if ("google" in window) {
-        const territory = await loadTerritory(territoryId);
+      if ("google" in window && !bounds) {
+        const { points: territory } = await loadTerritory(territoryId);
         const bounds = new window.google.maps.LatLngBounds();
         for (const p of territory) {
           addPoint(p);
@@ -36,7 +36,7 @@ function App() {
     }
     //  TODO find better solution to know when google maps is available
     setTimeout(prepareMap, 1000);
-  }, [territoryId, addPoint]);
+  }, [territoryId, addPoint, bounds]);
 
   function onClick(_props, _map, e) {
     if (isDrawing && e && e.latLng) {
@@ -73,7 +73,7 @@ function App() {
         "Cannot save territory because it's not a polygon yet. Please add another point on the poly before saving"
       );
     }
-    if (window.confirm(`Save territory as "${territoryId}"?`)) {
+    if (window.confirm(`Save territory "${territoryId}"?`)) {
       try {
         await saveTerritory({ name: territoryId, points });
         reset();

@@ -40,19 +40,12 @@ export const DrawTool = ({ active = false, children, onClick }) => (
   </p>
 );
 
-export default ({
-  isDrawing = false,
-  onLoadClick,
-  onSave,
-  onToggleIsDrawing,
-  onUndo
-}) => (
+export default ({ isDrawing = false, onSave, onToggleIsDrawing, onUndo }) => (
   <div css={styles.container}>
     <DrawTool active={isDrawing} onClick={onToggleIsDrawing}>
       Draw
     </DrawTool>
     <DrawTool onClick={onUndo}>Undo</DrawTool>
     <DrawTool onClick={onSave}>Save</DrawTool>
-    <DrawTool onClick={onLoadClick}>Load</DrawTool>
   </div>
 );
