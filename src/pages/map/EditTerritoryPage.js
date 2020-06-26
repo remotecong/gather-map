@@ -8,18 +8,10 @@ import { loadTerritory, saveTerritory } from "../../utils/database";
 import { getAddress } from "./geocode";
 
 function App() {
-  const {
-    addLookup,
-    addPoint,
-    isDrawing,
-    points,
-    reset,
-    toggleIsDrawing,
-    undo
-  } = useDrawingState();
+  const { addLookup, addPoint, isDrawing, points, reset, toggleIsDrawing, undo } = useDrawingState();
   const [bounds, setBounds] = React.useState(null);
   const {
-    params: { id: territoryId }
+    params: { id: territoryId },
   } = useRouteMatch();
 
   React.useEffect(() => {
@@ -75,7 +67,7 @@ function App() {
     }
     if (window.confirm(`Save territory "${territoryId}"?`)) {
       try {
-        await saveTerritory({ name: territoryId, points });
+        await saveTerritory({ id: territoryId, points });
         reset();
       } catch (err) {
         alert("Error!\n" + (err.message || err.toString()));

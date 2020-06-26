@@ -6,7 +6,7 @@ import { saveTerritory } from "../../utils/database";
 const styles = {
   wrapper: css({
     width: 900,
-    margin: "auto"
+    margin: "auto",
   }),
   field: css({
     background: "none",
@@ -19,8 +19,8 @@ const styles = {
     textAlign: "center",
     width: "100%",
     "&:active, &:focus": {
-      borderBottomColor: "currentColor"
-    }
+      borderBottomColor: "currentColor",
+    },
   }),
   button: css({
     background: "none",
@@ -33,9 +33,9 @@ const styles = {
     padding: "1rem",
     "&:disabled": {
       background: "#eee",
-      opacity: "0.3"
-    }
-  })
+      opacity: "0.3",
+    },
+  }),
 };
 
 function NewTerritoryPage() {
@@ -44,7 +44,7 @@ function NewTerritoryPage() {
   async function onSave(e) {
     e.preventDefault();
     try {
-      await saveTerritory({ name, points: [] });
+      await saveTerritory({ id: name, points: [] });
       setName("");
     } catch (err) {
       alert("Error occurred!");
@@ -60,12 +60,7 @@ function NewTerritoryPage() {
     <div css={styles.wrapper}>
       <h1>New Territory</h1>
       <form onSubmit={onSave}>
-        <input
-          placeholder="Name (e.g. 32BA)"
-          css={styles.field}
-          onChange={onInput}
-          value={name}
-        />
+        <input placeholder="Name (e.g. 32BA)" css={styles.field} onChange={onInput} value={name} />
         <button css={styles.button} disabled={!name}>
           Save
         </button>
